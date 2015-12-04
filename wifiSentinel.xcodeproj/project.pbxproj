@@ -16,6 +16,9 @@
 		7DA508D81C0D35C0004426CE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DA508D61C0D35C0004426CE /* LaunchScreen.storyboard */; };
 		7DA508E31C0D35C0004426CE /* wifiSentinelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DA508E21C0D35C0004426CE /* wifiSentinelTests.m */; };
 		7DA508EE1C0D35C0004426CE /* wifiSentinelUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DA508ED1C0D35C0004426CE /* wifiSentinelUITests.m */; };
+		7DA508FD1C0E8F1C004426CE /* PushNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DA508FC1C0E8F1C004426CE /* PushNotification.m */; };
+		7DA509011C0FE23E004426CE /* user.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DA509001C0FE23E004426CE /* user.m */; };
+		7DA509051C113884004426CE /* AlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DA509041C113883004426CE /* AlertViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +57,14 @@
 		7DA508E91C0D35C0004426CE /* wifiSentinelUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wifiSentinelUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DA508ED1C0D35C0004426CE /* wifiSentinelUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = wifiSentinelUITests.m; sourceTree = "<group>"; };
 		7DA508EF1C0D35C0004426CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7DA508FB1C0E8F1C004426CE /* PushNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotification.h; sourceTree = "<group>"; };
+		7DA508FC1C0E8F1C004426CE /* PushNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotification.m; sourceTree = "<group>"; };
+		7DA508FE1C0FD5E6004426CE /* util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		7DA508FF1C0FDC22004426CE /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		7DA509001C0FE23E004426CE /* user.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = user.m; sourceTree = "<group>"; };
+		7DA509021C0FE2C6004426CE /* user.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = user.h; sourceTree = "<group>"; };
+		7DA509031C113883004426CE /* AlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertViewController.h; sourceTree = "<group>"; };
+		7DA509041C113883004426CE /* AlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,12 +115,19 @@
 		7DA508C41C0D35C0004426CE /* wifiSentinel */ = {
 			isa = PBXGroup;
 			children = (
+				7DA509021C0FE2C6004426CE /* user.h */,
+				7DA509001C0FE23E004426CE /* user.m */,
+				7DA508FE1C0FD5E6004426CE /* util.h */,
+				7DA509031C113883004426CE /* AlertViewController.h */,
+				7DA509041C113883004426CE /* AlertViewController.m */,
 				7DA508C81C0D35C0004426CE /* AppDelegate.h */,
 				7DA508C91C0D35C0004426CE /* AppDelegate.m */,
 				7DA508CB1C0D35C0004426CE /* FirstViewController.h */,
 				7DA508CC1C0D35C0004426CE /* FirstViewController.m */,
 				7DA508CE1C0D35C0004426CE /* SecondViewController.h */,
 				7DA508CF1C0D35C0004426CE /* SecondViewController.m */,
+				7DA508FB1C0E8F1C004426CE /* PushNotification.h */,
+				7DA508FC1C0E8F1C004426CE /* PushNotification.m */,
 				7DA508D11C0D35C0004426CE /* Main.storyboard */,
 				7DA508D41C0D35C0004426CE /* Assets.xcassets */,
 				7DA508D61C0D35C0004426CE /* LaunchScreen.storyboard */,
@@ -122,6 +140,7 @@
 		7DA508C51C0D35C0004426CE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7DA508FF1C0FDC22004426CE /* PrefixHeader.pch */,
 				7DA508C61C0D35C0004426CE /* main.m */,
 			);
 			name = "Supporting Files";
@@ -212,6 +231,11 @@
 				TargetAttributes = {
 					7DA508C11C0D35C0004426CE = {
 						CreatedOnToolsVersion = 7.1.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					7DA508DD1C0D35C0004426CE = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -277,7 +301,10 @@
 			files = (
 				7DA508D01C0D35C0004426CE /* SecondViewController.m in Sources */,
 				7DA508CA1C0D35C0004426CE /* AppDelegate.m in Sources */,
+				7DA509051C113884004426CE /* AlertViewController.m in Sources */,
+				7DA508FD1C0E8F1C004426CE /* PushNotification.m in Sources */,
 				7DA508CD1C0D35C0004426CE /* FirstViewController.m in Sources */,
+				7DA509011C0FE23E004426CE /* user.m in Sources */,
 				7DA508C71C0D35C0004426CE /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -419,9 +446,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = wifiSentinel/PrefixHeader.pch;
 				INFOPLIST_FILE = wifiSentinel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.thumbgenius.wifiSentinel;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thumbgenius.wifisentinel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -430,9 +458,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = wifiSentinel/PrefixHeader.pch;
 				INFOPLIST_FILE = wifiSentinel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.thumbgenius.wifiSentinel;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thumbgenius.wifisentinel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

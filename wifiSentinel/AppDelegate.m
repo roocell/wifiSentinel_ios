@@ -7,15 +7,38 @@
 //
 
 #import "AppDelegate.h"
+#import "PushNotification.h"
+#import "AlertViewController.h"
 
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
-
+@synthesize apns_token=_apns_token;
+@synthesize fvc=_fvc;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Let the device know we want to receive push notifications
+    //-- Set Notification
+    if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
+    {
+        // iOS 8 Notifications
+        [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        
+        [application registerForRemoteNotifications];
+    }
+    else
+    {
+        // iOS < 8 Notifications
+        [application registerForRemoteNotificationTypes:
+         (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
+    }
+
+    // Handle APN on Terminated state, app launched because of APN
+    NSDictionary *payload = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+
+    
     // Override point for customization after application launch.
     return YES;
 }
@@ -40,6 +63,66 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+    const unsigned *tokenBytes = [deviceToken bytes];
+    NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                          ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                          ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                          ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+    
+    NSLog(@"My token is: %@", deviceToken);
+    NSLog(@"My hextoken is: %@", hexToken);
+    
+    _apns_token=[NSString stringWithString:hexToken];
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+    NSLog(@"Failed to get token, error: %@", error);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
+{
+    if(application.applicationState == UIApplicationStateInactive) {
+        
+        NSLog(@"Inactive");
+        
+        //Show the view with the content of the push
+        
+        completionHandler(UIBackgroundFetchResultNewData);
+        
+    } else if (application.applicationState == UIApplicationStateBackground) {
+        
+        NSLog(@"Background");
+        
+        //Refresh the local model 
+        
+        completionHandler(UIBackgroundFetchResultNewData);
+        
+    } else {
+        
+        NSLog(@"Active");
+                
+        // show in-app alert
+        TGLog(@"APNS triggered: %@", userInfo);
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+        AlertViewController* avc = (AlertViewController*) [storyboard        instantiateViewControllerWithIdentifier:@"ALERT_VIEW_CONTROLLER"];
+ 
+        avc.apns_data=[NSDictionary dictionaryWithDictionary:userInfo];
+
+        [_fvc presentViewController:avc animated:YES completion:^{}];
+
+        completionHandler(UIBackgroundFetchResultNewData);
+        
+    }
+
+    
+
+    
 }
 
 @end

@@ -1,0 +1,19 @@
+//
+//  PrefixHeader.pch
+//  wifiSentinel
+//
+//  Created by michael russell on 2015-12-02.
+//  Copyright © 2015 ThumbGenius Software. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#ifdef __OBJC__
+    #import "util.h"
+#endif
+
+#endif /* PrefixHeader_pch */

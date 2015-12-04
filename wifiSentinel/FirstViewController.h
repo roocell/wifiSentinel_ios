@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FirstViewController : UIViewController
-
+@interface FirstViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+{
+    NSMutableArray* userlist;  // NSStrings
+}
+@property (retain, nonatomic) IBOutlet UITableView* tableView;
+@property (retain, nonatomic) NSMutableArray* userlist;
 
 @end
 
