@@ -78,14 +78,14 @@
 }
 */
 
-#define ALLOWED_URL @"http://roocell.homeip.net/docker/new_user.php?username=%@&device_token=%@"
+#define ALLOWED_URL @"%@/new_user.php?username=%@&device_token=%@"
 
 -(IBAction) allowButtonPressed:(id) sender
 {
    TGMark;
    AppDelegate* appdel = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     
-    NSString *urlAsString = [NSString stringWithFormat:ALLOWED_URL, _username, appdel.apns_token];
+    NSString *urlAsString = [NSString stringWithFormat:ALLOWED_URL, BASE_URL, _username, appdel.apns_token];
     NSLog(@"%@", urlAsString);
     
     NSURLSession *session = [NSURLSession sharedSession];

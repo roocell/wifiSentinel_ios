@@ -6,6 +6,7 @@
  *
  */
 
+#define BASE_URL @"http://google.com"
 
 #define TGLog(message, ...) NSLog(@"%s:%d %@", __FUNCTION__, __LINE__, [NSString stringWithFormat:message, ##__VA_ARGS__])
 #define TGMark    TGLog(@"");

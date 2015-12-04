@@ -14,7 +14,7 @@
 
 @end
 
-#define USERS_URL @"http://roocell.homeip.net/docker/users.php"
+#define USERS_URL @"%@/users.php"
 
 @implementation FirstViewController
 @synthesize  userlist=_userlist;
@@ -65,7 +65,7 @@
     
     _userlist=[NSMutableArray arrayWithCapacity:0];
 
-    NSString *urlAsString = [NSString stringWithFormat:@"%@", USERS_URL];
+    NSString *urlAsString = [NSString stringWithFormat:USERS_URL, BASE_URL];
     NSLog(@"%@", urlAsString);
   
     NSURLSession *session = [NSURLSession sharedSession];
