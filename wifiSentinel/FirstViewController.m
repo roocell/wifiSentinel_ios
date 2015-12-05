@@ -129,7 +129,7 @@
                             action:@selector(getUsers)
                   forControlEvents:UIControlEventValueChanged];
     
-[   _tableView insertSubview:_refreshControl atIndex:0];
+    [_tableView insertSubview:_refreshControl atIndex:0];
     
     UITableViewController *tableViewController = [[UITableViewController alloc] init];
     tableViewController.tableView = _tableView;
@@ -204,10 +204,9 @@
     UILabel *timeLabel = (UILabel *)[cell viewWithTag:101];
     
     user* u=[_userlist objectAtIndex:[indexPath row]];
- 
 
     userLabel.text=[NSString stringWithFormat:@"%@", u.username];
-    timeLabel.text=[NSString stringWithFormat:@"<%@>", u.expiry];
+    timeLabel.text=[NSString stringWithFormat:@"%@", (!u.expiry)?@"--":u.expiry];
  
     return cell;
 }

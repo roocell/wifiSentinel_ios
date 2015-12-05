@@ -33,6 +33,9 @@
                              //Do some thing here, eg dismiss the alertwindow
                              [myAlertController dismissViewControllerAnimated:YES completion:nil];
                              
+                             dispatch_async(dispatch_get_main_queue(), ^{
+                                 [appdel.fvc getUsers];
+                             });
                          }];
     
     //Step 3: Add the UIAlertAction ok that we just created to our AlertController

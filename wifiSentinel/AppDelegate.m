@@ -18,6 +18,21 @@
 @synthesize apns_token=_apns_token;
 @synthesize fvc=_fvc;
 
+-(void) showInAppAlert:(NSDictionary*) userInfo
+{
+    TGLog(@"%@", userInfo);
+
+    // show in-app alert
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    AlertViewController* avc = (AlertViewController*) [storyboard        instantiateViewControllerWithIdentifier:@"ALERT_VIEW_CONTROLLER"];
+    
+    avc.apns_data=[NSDictionary dictionaryWithDictionary:userInfo];
+    
+    [_fvc presentViewController:avc animated:YES completion:^{}];
+    
+
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Let the device know we want to receive push notifications
     //-- Set Notification
@@ -34,12 +49,31 @@
         [application registerForRemoteNotificationTypes:
          (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
     }
-
-    // Handle APN on Terminated state, app launched because of APN
-    NSDictionary *payload = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-
     
     // Override point for customization after application launch.
+    // Checking if application was launched by tapping icon, or push notification
+    if (!launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        TGLog(@"processing icon tap or notification tap");
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"userInfo.plist"];
+        
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+        NSDictionary *userInfo = [NSDictionary dictionaryWithContentsOfFile:filePath];
+        if (userInfo) {
+            // Launched by tapping icon
+            // ... your handling here
+            [self showInAppAlert:userInfo];
+        }
+    } else {
+        TGLog(@"processing swiped notification");
+        NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        if (userInfo) {
+            [self showInAppAlert:userInfo];
+        }
+    }
+
+    
     return YES;
 }
 
@@ -85,12 +119,25 @@
     NSLog(@"Failed to get token, error: %@", error);
 }
 
+-(void) writeUserInfoToFile:(NSDictionary*) userInfo
+{
+    // When we get a push, just writing it to file
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"userInfo.plist"];
+    [userInfo writeToFile:filePath atomically:YES];
+}
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
 {
+    
+    TGLog(@"APNS triggered: %@", userInfo);
+
     if(application.applicationState == UIApplicationStateInactive) {
         
         NSLog(@"Inactive");
         
+        [self writeUserInfoToFile:userInfo];
         //Show the view with the content of the push
         
         completionHandler(UIBackgroundFetchResultNewData);
@@ -98,26 +145,21 @@
     } else if (application.applicationState == UIApplicationStateBackground) {
         
         NSLog(@"Background");
-        
+        [self writeUserInfoToFile:userInfo];
+       
         //Refresh the local model 
+        [self showInAppAlert:userInfo];
         
         completionHandler(UIBackgroundFetchResultNewData);
         
     } else {
         
         NSLog(@"Active");
-                
-        // show in-app alert
-        TGLog(@"APNS triggered: %@", userInfo);
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-        AlertViewController* avc = (AlertViewController*) [storyboard        instantiateViewControllerWithIdentifier:@"ALERT_VIEW_CONTROLLER"];
- 
-        avc.apns_data=[NSDictionary dictionaryWithDictionary:userInfo];
-
-        [_fvc presentViewController:avc animated:YES completion:^{}];
-
-        completionHandler(UIBackgroundFetchResultNewData);
         
+        [self showInAppAlert:userInfo];
+                
+        completionHandler(UIBackgroundFetchResultNewData);
+  
     }
 
     
