@@ -15,11 +15,42 @@
 @end
 
 #define USERS_URL @"%@/users.php"
+#define DELETE_USER_URL @"%@/delete_user.php?username=%@&device_token=%@"
+
 
 @implementation FirstViewController
 @synthesize  userlist=_userlist;
 @synthesize tableView=_tableView;
 @synthesize refreshControl=_refreshControl;
+
+
+-(void) alertView:(NSString*) title withMsg:(NSString*) msg
+{
+    AppDelegate* appdel = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    UIAlertController *myAlertController = [UIAlertController alertControllerWithTitle:title
+                                                                               message: msg
+                                                                        preferredStyle:UIAlertControllerStyleAlert                   ];
+    
+    //Step 2: Create a UIAlertAction that can be added to the alert
+    UIAlertAction* ok = [UIAlertAction
+                         actionWithTitle:@"OK"
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                             //Do some thing here, eg dismiss the alertwindow
+                             [myAlertController dismissViewControllerAnimated:YES completion:nil];
+                             
+                         }];
+    
+    //Step 3: Add the UIAlertAction ok that we just created to our AlertController
+    [myAlertController addAction: ok];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //Step 4: Present the alert to the user
+        [appdel.fvc presentViewController:myAlertController animated:YES completion:nil];
+    });
+}
+
 
 -(void) parseUsers:(NSData*) data
 {
@@ -257,8 +288,43 @@
 {
     if (editingStyle==UITableViewCellEditingStyleDelete)
     {
+        AppDelegate* appdel = (AppDelegate*)[[UIApplication sharedApplication] delegate];
         user* u=[_userlist objectAtIndex:[indexPath row]];
         TGLog(@"delete user %@", u.username);
+
+        NSString *urlAsString = [NSString stringWithFormat:DELETE_USER_URL, BASE_URL, u.username, appdel.apns_token];
+        NSLog(@"%@", urlAsString);
+        
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithURL:[NSURL URLWithString:urlAsString]
+                completionHandler:^(NSData *data,
+                                    NSURLResponse *response,
+                                    NSError *error) {
+                    // handle response
+                    if (error) {
+                        TGLog(@"FAILED");
+                    } else {
+                        NSError *localError = nil;
+                        NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&localError];
+                        if (localError != nil) {
+                            TGLog(@"%@", localError);
+                            return;
+                        }
+                        TGLog(@"%@", parsedObject);
+                        
+                        NSRange search=[[parsedObject valueForKey:@"status"] rangeOfString:@"deleted"];
+                        if (search.location != NSNotFound)
+                        {
+                            [self alertView:@"User Deleted" withMsg:[NSString stringWithFormat:@"%@ can't mess with your network any longer.", u.username]];
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self getUsers];
+                        });
+
+                    }
+                }] resume];
+
     }
 }
 
