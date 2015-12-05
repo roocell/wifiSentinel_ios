@@ -19,6 +19,7 @@
 @implementation FirstViewController
 @synthesize  userlist=_userlist;
 @synthesize tableView=_tableView;
+@synthesize refreshControl=_refreshControl;
 
 -(void) parseUsers:(NSData*) data
 {
@@ -53,6 +54,28 @@
     
 }
 
+-(void) getUsers
+{
+    [_userlist removeAllObjects];
+    NSString *urlAsString = [NSString stringWithFormat:USERS_URL, BASE_URL];
+    NSLog(@"%@", urlAsString);
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    [[session dataTaskWithURL:[NSURL URLWithString:urlAsString]
+            completionHandler:^(NSData *data,
+                                NSURLResponse *response,
+                                NSError *error) {
+                // handle response
+                if (error) {
+                    TGLog(@"FAILED");
+                } else {
+                    [self parseUsers:data];
+                }
+                [_refreshControl endRefreshing];
+            }] resume];
+
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -65,22 +88,22 @@
     
     _userlist=[NSMutableArray arrayWithCapacity:0];
 
-    NSString *urlAsString = [NSString stringWithFormat:USERS_URL, BASE_URL];
-    NSLog(@"%@", urlAsString);
-  
-    NSURLSession *session = [NSURLSession sharedSession];
-    [[session dataTaskWithURL:[NSURL URLWithString:urlAsString]
-            completionHandler:^(NSData *data,
-                                NSURLResponse *response,
-                                NSError *error) {
-                // handle response
-                if (error) {
-                    TGLog(@"FAILED");
-                } else {
-                    [self parseUsers:data];
-                }
-  
-            }] resume];
+    [self getUsers];
+    
+    // Initialize the refresh control.
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor blueColor];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(getUsers)
+                  forControlEvents:UIControlEventValueChanged];
+    
+[   _tableView insertSubview:_refreshControl atIndex:0];
+    
+    UITableViewController *tableViewController = [[UITableViewController alloc] init];
+    tableViewController.tableView = _tableView;
+    tableViewController.refreshControl = _refreshControl;
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -94,7 +117,28 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    // Return the number of sections.
+    if ([_userlist count])
+    {
+        _tableView.backgroundView = nil;
+        return 1;
+    } else {
+        
+        // Display a message when the table is empty
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+        
+        messageLabel.text = @"No data is currently available. Please pull down to refresh.";
+        messageLabel.textColor = [UIColor blackColor];
+        messageLabel.numberOfLines = 0;
+        messageLabel.textAlignment = NSTextAlignmentCenter;
+        messageLabel.font = [UIFont fontWithName:@"Palatino-Italic" size:20];
+        [messageLabel sizeToFit];
+        
+        _tableView.backgroundView = messageLabel;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        
+    }
+    return 0;
 }
 
 /*

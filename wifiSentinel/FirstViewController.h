@@ -14,6 +14,6 @@
 }
 @property (retain, nonatomic) IBOutlet UITableView* tableView;
 @property (retain, nonatomic) NSMutableArray* userlist;
-
+@property (retain, nonatomic) UIRefreshControl* refreshControl;
 @end
 
