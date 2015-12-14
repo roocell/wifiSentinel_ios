@@ -17,5 +17,7 @@
 @property (retain, nonatomic) UIRefreshControl* refreshControl;
 -(void) getUsers;
 
+-(void) start;
+
 @end
 

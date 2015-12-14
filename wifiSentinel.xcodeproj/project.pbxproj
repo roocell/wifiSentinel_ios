@@ -19,6 +19,12 @@
 		7DA508FD1C0E8F1C004426CE /* PushNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DA508FC1C0E8F1C004426CE /* PushNotification.m */; };
 		7DA509011C0FE23E004426CE /* user.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DA509001C0FE23E004426CE /* user.m */; };
 		7DA509051C113884004426CE /* AlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DA509041C113883004426CE /* AlertViewController.m */; };
+		7DB6BB0E1C1DA16800FF2BDA /* RegistrationStartVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6BB0D1C1DA16800FF2BDA /* RegistrationStartVC.m */; };
+		7DB6BB131C1DF73700FF2BDA /* Sentinel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6BB121C1DF73700FF2BDA /* Sentinel.m */; };
+		7DB6BB161C1E000000FF2BDA /* RegistrationIp.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6BB151C1E000000FF2BDA /* RegistrationIp.m */; };
+		7DB6BB191C1E002700FF2BDA /* RegistrationConfigureAP.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6BB181C1E002700FF2BDA /* RegistrationConfigureAP.m */; };
+		7DB6BB1C1C1E004100FF2BDA /* RegistrationDoneVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6BB1B1C1E004100FF2BDA /* RegistrationDoneVC.m */; };
+		7DB6BB1E1C1E6C7200FF2BDA /* ios in Resources */ = {isa = PBXBuildFile; fileRef = 7DB6BB1D1C1E6C7100FF2BDA /* ios */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +71,17 @@
 		7DA509021C0FE2C6004426CE /* user.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = user.h; sourceTree = "<group>"; };
 		7DA509031C113883004426CE /* AlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertViewController.h; sourceTree = "<group>"; };
 		7DA509041C113883004426CE /* AlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertViewController.m; sourceTree = "<group>"; };
+		7DB6BB0C1C1DA16800FF2BDA /* RegistrationStartVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationStartVC.h; sourceTree = "<group>"; };
+		7DB6BB0D1C1DA16800FF2BDA /* RegistrationStartVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationStartVC.m; sourceTree = "<group>"; };
+		7DB6BB111C1DF73700FF2BDA /* Sentinel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sentinel.h; sourceTree = "<group>"; };
+		7DB6BB121C1DF73700FF2BDA /* Sentinel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sentinel.m; sourceTree = "<group>"; };
+		7DB6BB141C1E000000FF2BDA /* RegistrationIp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationIp.h; sourceTree = "<group>"; };
+		7DB6BB151C1E000000FF2BDA /* RegistrationIp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationIp.m; sourceTree = "<group>"; };
+		7DB6BB171C1E002700FF2BDA /* RegistrationConfigureAP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationConfigureAP.h; sourceTree = "<group>"; };
+		7DB6BB181C1E002700FF2BDA /* RegistrationConfigureAP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationConfigureAP.m; sourceTree = "<group>"; };
+		7DB6BB1A1C1E004100FF2BDA /* RegistrationDoneVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationDoneVC.h; sourceTree = "<group>"; };
+		7DB6BB1B1C1E004100FF2BDA /* RegistrationDoneVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationDoneVC.m; sourceTree = "<group>"; };
+		7DB6BB1D1C1E6C7100FF2BDA /* ios */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ios; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,8 +132,11 @@
 		7DA508C41C0D35C0004426CE /* wifiSentinel */ = {
 			isa = PBXGroup;
 			children = (
+				7DB6BB0B1C1DA0FB00FF2BDA /* registration */,
 				7DA509021C0FE2C6004426CE /* user.h */,
 				7DA509001C0FE23E004426CE /* user.m */,
+				7DB6BB111C1DF73700FF2BDA /* Sentinel.h */,
+				7DB6BB121C1DF73700FF2BDA /* Sentinel.m */,
 				7DA508FE1C0FD5E6004426CE /* util.h */,
 				7DA509031C113883004426CE /* AlertViewController.h */,
 				7DA509041C113883004426CE /* AlertViewController.m */,
@@ -140,6 +160,7 @@
 		7DA508C51C0D35C0004426CE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7DB6BB1D1C1E6C7100FF2BDA /* ios */,
 				7DA508FF1C0FDC22004426CE /* PrefixHeader.pch */,
 				7DA508C61C0D35C0004426CE /* main.m */,
 			);
@@ -162,6 +183,21 @@
 				7DA508EF1C0D35C0004426CE /* Info.plist */,
 			);
 			path = wifiSentinelUITests;
+			sourceTree = "<group>";
+		};
+		7DB6BB0B1C1DA0FB00FF2BDA /* registration */ = {
+			isa = PBXGroup;
+			children = (
+				7DB6BB0C1C1DA16800FF2BDA /* RegistrationStartVC.h */,
+				7DB6BB0D1C1DA16800FF2BDA /* RegistrationStartVC.m */,
+				7DB6BB141C1E000000FF2BDA /* RegistrationIp.h */,
+				7DB6BB151C1E000000FF2BDA /* RegistrationIp.m */,
+				7DB6BB171C1E002700FF2BDA /* RegistrationConfigureAP.h */,
+				7DB6BB181C1E002700FF2BDA /* RegistrationConfigureAP.m */,
+				7DB6BB1A1C1E004100FF2BDA /* RegistrationDoneVC.h */,
+				7DB6BB1B1C1E004100FF2BDA /* RegistrationDoneVC.m */,
+			);
+			name = registration;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,6 +310,7 @@
 			files = (
 				7DA508D81C0D35C0004426CE /* LaunchScreen.storyboard in Resources */,
 				7DA508D51C0D35C0004426CE /* Assets.xcassets in Resources */,
+				7DB6BB1E1C1E6C7200FF2BDA /* ios in Resources */,
 				7DA508D31C0D35C0004426CE /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,8 +337,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DA508D01C0D35C0004426CE /* SecondViewController.m in Sources */,
+				7DB6BB161C1E000000FF2BDA /* RegistrationIp.m in Sources */,
 				7DA508CA1C0D35C0004426CE /* AppDelegate.m in Sources */,
+				7DB6BB0E1C1DA16800FF2BDA /* RegistrationStartVC.m in Sources */,
 				7DA509051C113884004426CE /* AlertViewController.m in Sources */,
+				7DB6BB1C1C1E004100FF2BDA /* RegistrationDoneVC.m in Sources */,
+				7DB6BB131C1DF73700FF2BDA /* Sentinel.m in Sources */,
+				7DB6BB191C1E002700FF2BDA /* RegistrationConfigureAP.m in Sources */,
 				7DA508FD1C0E8F1C004426CE /* PushNotification.m in Sources */,
 				7DA508CD1C0D35C0004426CE /* FirstViewController.m in Sources */,
 				7DA509011C0FE23E004426CE /* user.m in Sources */,
@@ -533,6 +575,7 @@
 				7DA508F41C0D35C0004426CE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7DA508F51C0D35C0004426CE /* Build configuration list for PBXNativeTarget "wifiSentinelTests" */ = {
 			isa = XCConfigurationList;
@@ -541,6 +584,7 @@
 				7DA508F71C0D35C0004426CE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7DA508F81C0D35C0004426CE /* Build configuration list for PBXNativeTarget "wifiSentinelUITests" */ = {
 			isa = XCConfigurationList;
@@ -549,6 +593,7 @@
 				7DA508FA1C0D35C0004426CE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

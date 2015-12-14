@@ -8,21 +8,16 @@
 
 #import "FirstViewController.h"
 #import "user.h"
-#import "AppDelegate.h"
+#import "RegistrationStartVC.h"
 
 @interface FirstViewController ()
 
 @end
 
-#define USERS_URL @"%@/users.php"
-#define DELETE_USER_URL @"%@/delete_user.php?username=%@&device_token=%@"
-
-
 @implementation FirstViewController
 @synthesize  userlist=_userlist;
 @synthesize tableView=_tableView;
 @synthesize refreshControl=_refreshControl;
-
 
 -(void) alertView:(NSString*) title withMsg:(NSString*) msg
 {
@@ -87,8 +82,11 @@
 
 -(void) getUsers
 {
+    // also check registration - in case sentinel was removed and we're refreshing the view
+    [self checkRegistration];
+    
     [_userlist removeAllObjects];
-    NSString *urlAsString = [NSString stringWithFormat:USERS_URL, BASE_URL];
+    NSString *urlAsString = [NSString stringWithFormat:USERS_URL, BASE_URL, DEVICE_TOKEN];
     NSLog(@"%@", urlAsString);
     
     NSURLSession *session = [NSURLSession sharedSession];
@@ -108,6 +106,79 @@
 }
 
 
+-(void) parseRegistration:(NSData*) data
+{
+    NSError *localError = nil;
+    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&localError];
+    
+    if (localError != nil) {
+        TGLog(@"%@", localError);
+        return;
+    }
+    TGLog(@"%@", parsedObject);
+    
+    NSString* status=[parsedObject valueForKey:@"status"];
+    if ([status isEqualToString:@"error"])
+    {
+        TGLog(@"ERR %@", parsedObject);
+        return;
+    }
+    
+    NSString* action=[parsedObject valueForKey:@"action"];
+    TGLog(@"%@", action);
+
+    if ([action isEqualToString:REGISTRATION_ACTION_OUT_VALIDATED])
+    {
+        // all good
+        return;
+    } else if ([action isEqualToString:REGISTRATION_ACTION_OUT_UNKNOWN_DEVICE]) {
+        // bring up the registration wizard
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+            RegistrationStartVC* regvc = (RegistrationStartVC*) [storyboard        instantiateViewControllerWithIdentifier:@"REGISTRATION_START_VC"];
+            [self presentViewController:regvc animated:YES completion:^{}];
+            
+
+        });
+       
+    } else if ([action isEqualToString:REGISTRATION_ACTION_OUT_CREATED_EXISTING]) {
+    } else if ([action isEqualToString:REGISTRATION_ACTION_OUT_CREATED_NEW]) {
+    } else {
+        TGLog(@"ERR: unknown action out %@", action);
+    }
+    
+    
+    
+}
+
+-(void) checkRegistration
+{
+    if (DEVICE_TOKEN == nil) return;
+    
+    NSString *urlAsString = [NSString stringWithFormat:REGISTRATION_CHECK_URL, BASE_URL, REGISTRATION_ACTION_IN_CHECK, DEVICE_TOKEN];
+    NSLog(@"%@", urlAsString);
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    [[session dataTaskWithURL:[NSURL URLWithString:urlAsString]
+            completionHandler:^(NSData *data,
+                                NSURLResponse *response,
+                                NSError *error) {
+                // handle response
+                if (error) {
+                    TGLog(@"FAILED");
+                } else {
+                    [self parseRegistration:data];
+                }
+            }] resume];
+}
+
+-(void) start
+{
+    [self getUsers];
+    [self checkRegistration];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
@@ -118,8 +189,6 @@
     NSLog(@"size : %f - %f ", _tableView.frame.size.width, _tableView.bounds.size.width);
     
     _userlist=[NSMutableArray arrayWithCapacity:0];
-
-    [self getUsers];
     
     // Initialize the refresh control.
     self.refreshControl = [[UIRefreshControl alloc] init];
@@ -134,7 +203,7 @@
     UITableViewController *tableViewController = [[UITableViewController alloc] init];
     tableViewController.tableView = _tableView;
     tableViewController.refreshControl = _refreshControl;
-
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -162,7 +231,7 @@
         messageLabel.textColor = [UIColor blackColor];
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = NSTextAlignmentCenter;
-        messageLabel.font = [UIFont fontWithName:@"Palatino-Italic" size:20];
+        //messageLabel.font = [UIFont fontWithName:@"Palatino-Italic" size:20];
         [messageLabel sizeToFit];
         
         _tableView.backgroundView = messageLabel;
@@ -325,14 +394,6 @@
                 }] resume];
 
     }
-}
-
-
-
-#pragma PULL DOWN TO REFRESH
-- (void)reloadTableViewDataSource
-{
-    
 }
 
 

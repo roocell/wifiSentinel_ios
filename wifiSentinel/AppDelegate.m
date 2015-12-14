@@ -73,7 +73,6 @@
         }
     }
 
-    
     return YES;
 }
 
@@ -112,6 +111,7 @@
     NSLog(@"My hextoken is: %@", hexToken);
     
     _apns_token=[NSString stringWithString:hexToken];
+    [_fvc start];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
@@ -139,6 +139,7 @@
         
         [self writeUserInfoToFile:userInfo];
         //Show the view with the content of the push
+        [self showInAppAlert:userInfo];
         
         completionHandler(UIBackgroundFetchResultNewData);
         
