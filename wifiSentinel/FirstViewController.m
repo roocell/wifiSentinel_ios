@@ -179,6 +179,42 @@
     [self checkRegistration];
 }
 
+-(void) unregisterButtonPressed:(id)sender
+{
+    TGMark;
+    NSString *urlAsString = [NSString stringWithFormat:UNREGISTER_URL, BASE_URL, REGISTRATION_ACTION_IN_DELETE, DEVICE_TOKEN];
+    NSLog(@"%@", urlAsString);
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    [[session dataTaskWithURL:[NSURL URLWithString:urlAsString]
+            completionHandler:^(NSData *data,
+                                NSURLResponse *response,
+                                NSError *error) {
+                // handle response
+                if (error) {
+                    TGLog(@"FAILED");
+                } else {
+                    NSError *localError = nil;
+                    NSDictionary *parsedObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&localError];
+                    
+                    if (localError != nil) {
+                        TGLog(@"%@", localError);
+                        return;
+                    }
+                    
+                    NSString* status=[parsedObject valueForKey:@"status"];
+                    if ([status isEqualToString:@"error"])
+                    {
+                        TGLog(@"ERR %@", parsedObject);
+                        return;
+                    } else {
+                        [self alertView:@"Unregister" withMsg:[parsedObject valueForKey:@"message"]];
+                    }
+                }
+            }] resume];
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
@@ -221,7 +257,6 @@
     if ([_userlist count])
     {
         _tableView.backgroundView = nil;
-        return 1;
     } else {
         
         // Display a message when the table is empty
@@ -238,7 +273,7 @@
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         
     }
-    return 0;
+    return 1;
 }
 
 /*
@@ -258,25 +293,40 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_userlist count];
+    return [_userlist count]+1; // +1 for unregister button
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *CellIdentifier = @"USER_TABLE_CELL";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-    UILabel *userLabel = (UILabel *)[cell viewWithTag:100];
-    UILabel *timeLabel = (UILabel *)[cell viewWithTag:101];
-    
-    user* u=[_userlist objectAtIndex:[indexPath row]];
+    TGLog(@"%@", indexPath);
+   UITableViewCell *cell;
+    if ([indexPath row]<[_userlist count])
+    {
+        NSString *CellIdentifier = @"USER_TABLE_CELL";
+         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        UILabel *userLabel = (UILabel *)[cell viewWithTag:100];
+        UILabel *timeLabel = (UILabel *)[cell viewWithTag:101];
+        
+        user* u=[_userlist objectAtIndex:[indexPath row]];
 
-    userLabel.text=[NSString stringWithFormat:@"%@", u.username];
-    timeLabel.text=[NSString stringWithFormat:@"%@", (!u.expiry)?@"--":u.expiry];
- 
+        userLabel.text=[NSString stringWithFormat:@"%@", u.username];
+        timeLabel.text=[NSString stringWithFormat:@"%@", (!u.expiry)?@"--":u.expiry];
+    } else {
+        TGMark;
+        NSString *CellIdentifier = @"UNREGISTER_CELL";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        UIButton *but = (UIButton *)[cell viewWithTag:100];
+        [but addTarget:self action:@selector(unregisterButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
+    }
     return cell;
 }
 

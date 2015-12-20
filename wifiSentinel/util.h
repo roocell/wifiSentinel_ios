@@ -24,6 +24,9 @@
 #define REGISTRATION_ACTION_IN_CHECK    @"check"
 #define REGISTRATION_ACTION_IN_CREATE   @"create"
 
+#define UNREGISTER_URL  @"%@/registration.php?action=%@&device_token=%@"
+#define REGISTRATION_ACTION_IN_DELETE   @"delete"
+
 #define REGISTRATION_ACTION_OUT_CREATED_EXISTING    @"created_existing"
 #define REGISTRATION_ACTION_OUT_CREATED_NEW         @"created_new"
 #define REGISTRATION_ACTION_OUT_VALIDATED           @"validated"
