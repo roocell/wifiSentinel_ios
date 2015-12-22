@@ -131,7 +131,7 @@
     TGLog(@"%@", action);
 
     NSString* server_ip=[parsedObject valueForKey:@"server_ip"];
-    NSString* server_port=[parsedObject valueForKey:@"server_port"];
+    NSNumber* server_port=[parsedObject valueForKey:@"server_port"];
     NSString* server_secret=[parsedObject valueForKey:@"server_secret"];
     
     BOOL created=NO;
@@ -161,10 +161,11 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             _serverIpAddress=[NSString stringWithString:server_ip];
-            _serverPort=[NSString stringWithString:server_port];
+            _serverPort=[NSString stringWithFormat:@"%@",server_port];
             _serverSecret=[NSString stringWithString:server_secret];
             
             [_nextButton setTitle:@"Next" forState:UIControlStateNormal];
+            _nextButton.backgroundColor=[UIColor greenColor];
             [_loader stopAnimating];
         });
     

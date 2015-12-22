@@ -221,9 +221,7 @@
 
     AppDelegate* appdel = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     appdel.fvc=self;
-    
-    NSLog(@"size : %f - %f ", _tableView.frame.size.width, _tableView.bounds.size.width);
-    
+        
     _userlist=[NSMutableArray arrayWithCapacity:0];
     
     // Initialize the refresh control.
@@ -253,6 +251,9 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    _tableView.backgroundView = nil;
+    return 1;
+
     // Return the number of sections.
     if ([_userlist count])
     {
