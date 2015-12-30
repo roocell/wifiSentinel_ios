@@ -172,11 +172,23 @@
     }
 }
 
+BOOL isRunningTestFlightBeta()
+{
+    NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
+    NSString *receiptURLString = [receiptURL path];
+    return  ([receiptURLString rangeOfString:@"sandboxReceipt"].location != NSNotFound);
+}
+
 -(void) sendRegistration
 {
     NSString *urlAsString = [NSString stringWithFormat:REGISTRATION_CREATE_URL, BASE_URL, REGISTRATION_ACTION_IN_CREATE,
         DEVICE_TOKEN,
-        _ipAddressTextField.text];
+        _ipAddressTextField.text,
+#if DEBUG
+        1];
+#else
+        0];
+#endif
     NSLog(@"%@", urlAsString);
     
     [_loader startAnimating];

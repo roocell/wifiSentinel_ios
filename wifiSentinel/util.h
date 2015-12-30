@@ -20,7 +20,7 @@
 #define DELETE_USER_URL @"%@/delete_user.php?username=%@&device_token=%@"
 
 #define REGISTRATION_CHECK_URL  @"%@/registration.php?action=%@&device_token=%@"
-#define REGISTRATION_CREATE_URL @"%@/registration.php?action=%@&device_token=%@&apip=%@"
+#define REGISTRATION_CREATE_URL @"%@/registration.php?action=%@&device_token=%@&apip=%@&debug=%d"
 #define REGISTRATION_ACTION_IN_CHECK    @"check"
 #define REGISTRATION_ACTION_IN_CREATE   @"create"
 
@@ -34,3 +34,5 @@
 
 
 #define DEVICE_TOKEN [((AppDelegate*)[[UIApplication sharedApplication] delegate]) apns_token]
+
+
